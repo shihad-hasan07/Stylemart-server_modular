@@ -11,15 +11,14 @@ export interface IProduct {
         price?: number;
         ends?: string;
     };
+    rating?: {
+        average: number;
+        count: number;
+    };
 
     images: string[];
     categories: string[];
     tags: string[];
-
-    rating: {
-        average: number;
-        count: number;
-    };
 
     stock: {
         inStock: boolean;

@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import app from './index.js';
+import app from './app.js';
 
 
 main().catch(err => console.log(err));

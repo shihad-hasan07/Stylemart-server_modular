@@ -19,13 +19,13 @@ const ProductsSchema = new Schema<IProduct>({
     tags: { type: [String], required: true },
 
     rating: {
-        average: { type: Number },
-        count: { type: Number }
+        average: { type: Number, default: 0 },
+        count: { type: Number, default: 0 }
     },
 
     stock: {
         inStock: { type: Boolean, required: true },
-        quantity: { type: Number }
+        quantity: { type: Number, default: 0 }
     },
 
     variations: [
