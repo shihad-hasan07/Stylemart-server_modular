@@ -14,6 +14,7 @@ const UserController = {
           console.log('checkImageUpdates', checkImageUpdates);
 
           if (checkImageUpdates) {
+
             existingUser.photoURL = req.body.photoURL;
             const result = await existingUser.save();
             return apiSuccess(res, result, "User updated with new photoURL", 200);
@@ -36,8 +37,6 @@ const UserController = {
 
   getSingleUser: async (req: Request, res: Response) => {
     const { gmail } = req.query;
-    console.log('mail is', gmail);
-
     try {
       const result = await UserService.getUserByEmail(gmail as string);
       return apiSuccess(res, result);
@@ -49,9 +48,23 @@ const UserController = {
   updateUser: async (req: Request, res: Response) => {
     try {
       const userId = req.params.id;
-      const updateData: any = { ...req.body };
+      // const bodyData = { ...req.body }
+      const updateData = {
+        name: req.body.name,
+        email: req.body.email,
+        phone: req.body.phone,
+        photoURL: req.body.photoURL,
+        address: {
+          division: req.body.division,
+          city: req.body.city,
+          address: req.body.address,
+        }
+      }
+
+      console.log('updated data', userId, updateData);
 
       if (req.file) {
+        console.log('file revied', req.file?.filename);
         const cloudHostedImage = await uploadOnCloudinary(req.file?.path);
 
         if (!cloudHostedImage) {
@@ -62,10 +75,9 @@ const UserController = {
         }
         updateData.photoURL = cloudHostedImage.secure_url
       }
+      console.log('after the upload on cloud', updateData);
 
       const updatedUser = await UserService.updateUserById(userId as string, updateData)
-
-      // const result = await UserService.updateUserById(req.params.id as string, req.body);
       return apiSuccess(res, updatedUser, "User updated");
     } catch (error: any) {
       return apiError(res, error, "Failed to update user");

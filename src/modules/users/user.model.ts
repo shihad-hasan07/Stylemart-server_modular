@@ -16,9 +16,9 @@ const UserSchema = new Schema<IUser>(
         },
 
         address: {
-            division: String,
-            city: String,
-            address: String,
+            division: { type: String, default: '' },
+            city: { type: String, default: '' },
+            address: { type: String, default: '' },
         },
     },
     { timestamps: true }

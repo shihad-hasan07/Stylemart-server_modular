@@ -36,7 +36,8 @@ const fileFilter = (
 ): void => {
     const imageTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
     const videoTypes = ['video/mp4', 'video/mpeg', 'video/quicktime', 'video/x-msvideo', 'video/webm'];
-    const allowedTypes = [...imageTypes, ...videoTypes];
+    // const allowedTypes = [...imageTypes, ...videoTypes];
+    const allowedTypes = [...imageTypes];
 
     if (allowedTypes.includes(file.mimetype)) {
         cb(null, true);
