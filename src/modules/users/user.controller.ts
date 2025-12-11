@@ -11,8 +11,6 @@ const UserController = {
 
         if (existingUser) {
           const checkImageUpdates = req.body.photoURL && existingUser.photoURL !== req.body.photoURL;
-          console.log('checkImageUpdates', checkImageUpdates);
-
           if (checkImageUpdates) {
 
             existingUser.photoURL = req.body.photoURL;
@@ -30,7 +28,6 @@ const UserController = {
       const result = await UserService.createUser(payload);
       return apiSuccess(res, result, "User created", 201);
     } catch (error: any) {
-      console.log(error);
       return apiError(res, error, "Failed to create user", 400);
     }
   },
@@ -61,10 +58,8 @@ const UserController = {
         }
       }
 
-      console.log('updated data', userId, updateData);
 
       if (req.file) {
-        console.log('file revied', req.file?.filename);
         const cloudHostedImage = await uploadOnCloudinary(req.file?.path);
 
         if (!cloudHostedImage) {
@@ -75,7 +70,6 @@ const UserController = {
         }
         updateData.photoURL = cloudHostedImage.secure_url
       }
-      console.log('after the upload on cloud', updateData);
 
       const updatedUser = await UserService.updateUserById(userId as string, updateData)
       return apiSuccess(res, updatedUser, "User updated");
