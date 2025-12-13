@@ -24,13 +24,28 @@ const ProductsController = {
     getSingleProduct: async (req, res) => {
         try {
             const result = await ProductServices.getSingleProduct(req.params.productId);
-            console.log('result form single',req.params.productId);
+            console.log('result form single', req.params.productId);
             return apiSuccess(res, result);
         } catch (error) {
             return apiError(res, error, "Failed to fetch product");
         }
     },
 
+    getMultipleProduct: async (req, res) => {
+        try {
+            const { ids } = req.query;
+
+            if (!ids) {
+                return apiError(res, null, "Product ids are required", 400);
+            }
+            const idArray = ids.split(",");
+
+            const result = await ProductServices.getMultipleProducts(idArray)
+            return apiSuccess(res, result, "Multiple product fetched successfully")
+        } catch (error) {
+            return apiError(res, error, "Failed to get multiple Products")
+        }
+    },
     updateProduct: async (req, res) => {
         try {
             const result = await ProductServices.updateProduct(req.params.id, req.body);

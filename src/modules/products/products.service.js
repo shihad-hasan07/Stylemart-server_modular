@@ -13,6 +13,12 @@ const ProductServices = {
         return ProductsModel.findById(id);
     },
 
+    getMultipleProducts: async (ids) => {
+        return ProductsModel.find({
+            _id: { $in: ids }
+        })
+    },
+
     deleteProduct: async (productId) => {
         return ProductsModel.findByIdAndDelete(productId);
     },

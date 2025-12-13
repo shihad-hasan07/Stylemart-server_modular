@@ -9,6 +9,8 @@ router.post("/add-product", ProductsController.addProduct);
 
 router.get("/single/:productId", ProductsController.getSingleProduct);
 
+router.get("/multiple", ProductsController.getMultipleProduct);
+
 router.patch("/update/:productId", ProductsController.updateProduct);
 
 router.delete("/delete/:productId", ProductsController.deleteProduct);
