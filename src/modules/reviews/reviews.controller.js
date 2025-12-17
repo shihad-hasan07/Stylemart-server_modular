@@ -6,7 +6,6 @@ const ReviewController = {
     addReview: async (req, res) => {
         try {
             const result = await ReviewServices.addReview(req);
-
             return apiSuccess(
                 res,
                 result,
@@ -53,7 +52,7 @@ const ReviewController = {
     deleteReview: async (req, res) => {
         try {
             const { reviewId } = req.params;
-            const { userId } = req.body; // ✅ auth নাই, body থেকে
+            const { userId } = req.body; 
 
             const result = await ReviewServices.deleteReview(
                 reviewId,

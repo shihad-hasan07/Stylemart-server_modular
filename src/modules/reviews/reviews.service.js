@@ -130,7 +130,7 @@ const getReviewsByProduct = async (productId) => {
     const reviews = await Review.find({ productId })
         .populate({
             path: "userId",
-            select: "name photoURL -_id",
+            select: "_id name photoURL",
         })
         .sort({ createdAt: -1 });
 
