@@ -44,7 +44,6 @@ const addReview = async (req) => {
  */
 const updateReview = async (reviewId, req) => {
     const { rating, comment, userId } = req.body;
-
     if (!userId) {
         throw new Error("userId is required");
     }
@@ -133,10 +132,10 @@ const getReviewsByProduct = async (productId) => {
             select: "_id name photoURL",
         })
         .sort({ createdAt: -1 });
-
     return {
         productId,
         reviews: reviews.map(r => ({
+            _id: r._id,
             rating: r.rating,
             comment: r.comment,
             createdAt: r.createdAt,
