@@ -14,7 +14,11 @@ const ProductsController = {
 
     getProducts: async (req, res) => {
         try {
+            // const page = Math.max(Number(req.query.page) || 1, 1);
+            // const limit = Math.min(Number(req.query.limit) || 12, 40);
+            // const result = await ProductServices.getProducts({ page, limit });
             const result = await ProductServices.getProducts();
+
             return apiSuccess(res, result);
         } catch (error) {
             return apiError(res, error, "Failed to fetch products");

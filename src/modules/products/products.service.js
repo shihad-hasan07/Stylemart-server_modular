@@ -6,7 +6,26 @@ const ProductServices = {
     },
 
     getProducts: async () => {
-        return ProductsModel.find();
+        // const skip = (page - 1) * limit;
+
+        const products = await ProductsModel.find()
+            // .skip(skip)
+            // .limit(limit)
+            // .lean()
+
+        // const total = await ProductsModel.countDocuments()
+
+        return {
+            products,
+            // pagination: {
+            //     page,
+            //     limit,
+            //     totalProducts: total,
+            //     totalPages: Math.ceil(total / limit),
+            //     hasPrev: page > 1,
+            //     hasNext: page * limit < total
+            // }
+        }
     },
 
     getSingleProduct: async (id) => {
