@@ -4,8 +4,7 @@ import { Review } from "./reviews.model.js";
 /**
  * Add review
  */
-const addReview = async (req) => {
-    const { productId, rating, comment, userId } = req.body;
+const addReview = async (productId, rating, comment, userId) => {
 
     if (!userId) {
         throw new Error("userId is required");
@@ -42,8 +41,8 @@ const addReview = async (req) => {
 /**
  * Update review
  */
-const updateReview = async (reviewId, req) => {
-    const { rating, comment, userId } = req.body;
+const updateReview = async (reviewId, userId, rating, comment) => {
+
     if (!userId) {
         throw new Error("userId is required");
     }

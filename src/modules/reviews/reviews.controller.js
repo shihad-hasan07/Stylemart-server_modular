@@ -5,7 +5,10 @@ const ReviewController = {
     // create review
     addReview: async (req, res) => {
         try {
-            const result = await ReviewServices.addReview(req);
+            const userId = req.user._id.toString()
+            const { productId, rating, comment } = req.body
+
+            const result = await ReviewServices.addReview(productId, rating, comment, userId);
             return apiSuccess(
                 res,
                 result,
@@ -32,10 +35,14 @@ const ReviewController = {
     updateReview: async (req, res) => {
         try {
             const { reviewId } = req.params;
-
+            const user = req.user;
+            const userId = user._id.toString()
+            const { rating, comment } = req.body
             const result = await ReviewServices.updateReview(
                 reviewId,
-                req
+                userId,
+                rating,
+                comment
             );
 
             return apiSuccess(res, result, "Review updated");
@@ -52,7 +59,10 @@ const ReviewController = {
     deleteReview: async (req, res) => {
         try {
             const { reviewId } = req.params;
-            const { userId } = req.body; 
+
+            // get user info from the verifytoken_andUserz
+            const user = req.user;
+            const userId = user._id.toString()
 
             const result = await ReviewServices.deleteReview(
                 reviewId,

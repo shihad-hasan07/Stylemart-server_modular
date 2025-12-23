@@ -49,14 +49,14 @@ const UserController = {
       const userId = req.params.id;
 
       const updateData = {
-        name: req.body.name,
+        name: req.body.name.trim(),
         email: req.body.email,
-        phone: req.body.phone,
+        phone: req.body.phone.trim(),
         photoURL: req.body.photoURL,
         address: {
-          division: req.body.division,
-          city: req.body.city,
-          address: req.body.address,
+          division: req.body.division.trim(),
+          city: req.body.city.trim(),
+          address: req.body.address.trim(),
         }
       };
 
