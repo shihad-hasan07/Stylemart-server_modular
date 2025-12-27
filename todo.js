@@ -10,5 +10,5 @@
         3. add e review  -done (user)
 
 2. products api -
-        1.
+        1. upadte prouducts er api ta complete krte hbe 
 */

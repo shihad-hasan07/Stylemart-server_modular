@@ -15,7 +15,13 @@ const ProductsSchema = new Schema({
         ends: { type: String, default: null }
     },
 
-    images: { type: [String], required: true },
+    // images: { type: [String], required: true },
+    images: [
+        {
+            url: { type: String, required: true },
+            publicId: { type: String, required: false },
+        }
+    ],
     categories: { type: [String], required: true },
     tags: { type: [String], required: true },
 

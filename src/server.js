@@ -9,7 +9,9 @@ async function main() {
     await mongoose.connect(process.env.MONGODB_URI);
 
     app.listen(process.env.PORT, async () => {
-        await seedAdmin()
+        // admin e promote hosse na karon -->vercel serverless function based platform
+        // vps hosting e kaj krbe eita
+        // await seedAdmin()
         console.log(`Example app listening on port ${process.env.PORT}`);
     });
 }

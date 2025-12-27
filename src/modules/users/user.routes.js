@@ -11,7 +11,7 @@ router.get("/single", UserController.getSingleUser);
 router.post("/create-user", UserController.createUser);
 
 router.patch("/update/:id", (req, res, next) => {
-    upload.single('photo')(req, res, (err) => {
+    upload.single('image')(req, res, (err) => {
         if (err) return handleMulterError(err, req, res, next);
         UserController.updateUser(req, res);
     });

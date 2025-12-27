@@ -1,14 +1,60 @@
-// products.controller.js
 import ProductServices from "./products.service.js";
 import { apiError, apiSuccess } from "../../utlis/apiResponse.js";
+import { uploadOnCloudinary } from "../../utlis/cloudinary.utils.js";
 
 const ProductsController = {
     addProduct: async (req, res) => {
         try {
-            const result = await ProductServices.addProduct(req.body);
-            return apiSuccess(res, result, "Product created successfully", 201);
+            if (!req.files || req.files.length === 0) {
+                return res.status(400).json({
+                    success: false,
+                    message: "At least one image is required",
+                });
+            }
+            if (!req.body.data) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Product data is missing",
+                });
+            }
+
+            const parsedData = JSON.parse(req.body.data);
+            const finalData = {
+                ...parsedData,
+                images: [],
+            };
+
+            // Upload images to Cloudinary
+            for (const file of req.files) {
+                const uploaded = await uploadOnCloudinary(file.path);
+
+                if (!uploaded) {
+                    return res.status(500).json({
+                        success: false,
+                        message: "Image upload failed",
+                    });
+                }
+
+                finalData.images.push({
+                    url: uploaded.secure_url,
+                    publicId: uploaded.public_id,
+                });
+            }
+
+            const result = await ProductServices.addProduct(finalData);
+            return res.status(201).json({
+                success: true,
+                message: "Product created successfully",
+                data: result,
+            });
+
         } catch (error) {
-            return apiError(res, error, "Failed to create product");
+            console.error("Add product error:", error);
+
+            return res.status(500).json({
+                success: false,
+                message: "Failed to create product",
+            });
         }
     },
 
@@ -28,9 +74,14 @@ const ProductsController = {
     getSingleProduct: async (req, res) => {
         try {
             const result = await ProductServices.getSingleProduct(req.params.productId);
+
+            if (!result) {
+                return apiError(res, null, "Product not found", 404);
+            }
+
             return apiSuccess(res, result);
         } catch (error) {
-            return apiError(res, error, "Failed to fetch product");
+            return apiError(res, error, "Invalid product id or server error", 400);
         }
     },
 
@@ -44,11 +95,13 @@ const ProductsController = {
             const idArray = ids.split(",");
 
             const result = await ProductServices.getMultipleProducts(idArray)
+
             return apiSuccess(res, result, "Multiple product fetched successfully")
         } catch (error) {
             return apiError(res, error, "Failed to get multiple Products")
         }
     },
+
     updateProduct: async (req, res) => {
         try {
             const result = await ProductServices.updateProduct(req.params.id, req.body);
@@ -60,7 +113,7 @@ const ProductsController = {
 
     deleteProduct: async (req, res) => {
         try {
-            const result = await ProductServices.deleteProduct(req.params.id);
+            const result = await ProductServices.deleteProduct(req.params.productId);
             return apiSuccess(res, result, "Product deleted");
         } catch (error) {
             return apiError(res, error, "Failed to delete product");

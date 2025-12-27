@@ -1,3 +1,4 @@
+import { deleteFromCloudinary } from "../../utlis/cloudinary.utils.js";
 import { ProductsModel } from "./products.model.js";
 
 const ProductServices = {
@@ -6,49 +7,82 @@ const ProductServices = {
     },
 
     getProducts: async () => {
-        // const skip = (page - 1) * limit;
+        const products = await ProductsModel.find().lean();
 
-        const products = await ProductsModel.find()
-            // .skip(skip)
-            // .limit(limit)
-            // .lean()
-
-        // const total = await ProductsModel.countDocuments()
+        const productsForClient = products.map(product => ({
+            ...product,
+            images: product.images.map(img =>
+                typeof img === "string" ? img : img.url
+            ),
+        }));
 
         return {
-            products,
-            // pagination: {
-            //     page,
-            //     limit,
-            //     totalProducts: total,
-            //     totalPages: Math.ceil(total / limit),
-            //     hasPrev: page > 1,
-            //     hasNext: page * limit < total
-            // }
-        }
+            products: productsForClient,
+        };
     },
 
+
     getSingleProduct: async (id) => {
-        return ProductsModel.findById(id);
+        const product = await ProductsModel.findById(id).lean();
+        if (!product) return null;
+
+        return {
+            ...product,
+            images: product.images.map(img =>
+                typeof img === "string" ? img : img.url
+            ),
+        };
     },
 
     getMultipleProducts: async (ids) => {
-        return ProductsModel.find({
-            _id: { $in: ids }
-        })
+        const products = await ProductsModel.find({
+            _id: { $in: ids },
+        }).lean();
+
+        const productsForClient = products.map(product => ({
+            ...product,
+            images: product.images.map(img =>
+                typeof img === "string" ? img : img.url
+            ),
+        }));
+        return productsForClient
     },
 
+
     deleteProduct: async (productId) => {
-        return ProductsModel.findByIdAndDelete(productId);
+        const product = await ProductsModel.findById(productId);
+        if (!product) return null;
+
+        if (Array.isArray(product.images)) {
+            for (const img of product.images) {
+                if (img?.publicId) {
+                    await deleteFromCloudinary(img.publicId);
+                }
+            }
+        }
+
+        await product.deleteOne();
+        return product;
     },
 
     updateProduct: async (productId, payload) => {
-        return ProductsModel.findByIdAndUpdate(
+        const updated = await ProductsModel.findByIdAndUpdate(
             productId,
             { $set: payload },
             { new: true }
-        );
-    },
+        ).lean();
+
+        if (!updated) return null;
+
+        const productsForClient = updated.map(product => ({
+            ...product,
+            images: product.images.map(img =>
+                typeof img === "string" ? img : img.url
+            ),
+        }));
+
+        return productsForClient
+    }
 };
 
 export default ProductServices;
