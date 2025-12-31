@@ -19,4 +19,15 @@ router.patch("/update/:id", (req, res, next) => {
 
 router.delete("/delete/:id", UserController.deleteUser);
 
+
+router.get("/customers", UserController.getCustomers);
+
+
+// ====== ADMIN USERS MANAGEMENT ROUTES - ADD THESE ======
+
+router.get("/admin/all", UserController.getAdminUsers);
+router.post("/admin/users", UserController.addAdminUser);
+router.patch("/admin/users/:id", UserController.updateAdminRole);
+router.delete("/admin/users/:id", UserController.deleteAdminUser);
+
 export default router;

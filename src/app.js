@@ -5,6 +5,8 @@ import ProductsRouter from "./modules/products/products.routes.js";
 import UserRouter from "./modules/users/user.routes.js";
 import ReviewRouter from "./modules/reviews/reviews.routes.js";
 import OrderRouter from './modules/orders/order.routes.js';
+import DashboardRouter from './modules/Dashboard/dashboard.routes.js';
+import SettingRouter from './modules/setting/setting.routes.js'
 
 const app = express();
 
@@ -22,6 +24,12 @@ app.use('/api/v1/reviews', ReviewRouter);
 
 // order routes
 app.use('/api/v1/orders', OrderRouter)
+
+// dashboard route
+app.use('/api/v1/dashboard', DashboardRouter)
+
+// setitngs
+app.use('/api/v1/settings', SettingRouter)
 
 // test the server
 app.get('/', (req, res) => {

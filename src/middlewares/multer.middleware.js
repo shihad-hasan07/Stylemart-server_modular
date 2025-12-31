@@ -5,10 +5,10 @@ import path from 'path';
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         // For localhost - store in public/temp folder
-        cb(null, './public/temp');
+        // cb(null, './public/temp');
 
         // For Vercel - use tmp folder
-        // cb(null, "/tmp")
+        cb(null, "/tmp")
     },
     filename: function (req, file, cb) {
         const uniqueSuffix =
